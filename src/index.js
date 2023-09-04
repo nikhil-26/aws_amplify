@@ -3,15 +3,32 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Amplify } from "aws-amplify";
-import config from "./aws-exports";
 
-Amplify.configure(config);
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import { Amplify } from "aws-amplify";
+import awsconfig from "./aws-exports";
+import "@aws-amplify/ui-react/styles.css";
+import QuestionCreateForm from "./ui-components/QuestionCreateForm";
+import { ThemeProvider } from "@aws-amplify/ui-react";
+import { studioTheme, Navbar } from "./ui-components";
+import QuestionPage from "./QuestionPage";
+
+Amplify.configure(awsconfig);
+
+const router = createBrowserRouter([
+  { path: "/", element: <App /> },
+  { path: "/new-question", element: <QuestionCreateForm /> },
+  { path: "/question/:id", element: <QuestionPage /> },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={studioTheme}>
+      <Navbar />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
